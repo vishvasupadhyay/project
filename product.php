@@ -1,4 +1,20 @@
-<?php require 'header.php'?> 
+<?php require 'header.php'?>
+<?php require 'admin/config.php';?>
+<?php require 'filter.php';?>
+<?php
+$single_page_results = 5;
+$sql='SELECT * FROM products';
+$result = mysqli_query($conn, $sql);
+$number_of_results = mysqli_num_rows($result);
+$number_of_pages = ceil($number_of_results/$single_page_results);
+if (!isset($_GET['page'])) {
+    $page = 1;
+} else {
+    $page = $_GET['page'];
+}
+
+$this_page_first_result = ($page-1)*$single_page_results;
+?>
 
   <!-- catg header banner section -->
   <section id="aa-catg-head-banner">
@@ -8,7 +24,7 @@
       <div class="aa-catg-head-banner-content">
         <h2>Fashion</h2>
         <ol class="breadcrumb">
-          <li><a href="index.html">Home</a></li>         
+          <li><a href="index.html">Home</a></li>
           <li class="active">Women</li>
         </ol>
       </div>
@@ -54,8 +70,8 @@
                 <!-- product from mysql table  -->
                 <?php
                 require 'admin/config.php';
-                $sql2 = "SELECT * FROM products";
-                $result = mysqli_query($conn, $sql2) 
+                $sql2 = 'SELECT * FROM products LIMIT ' . $this_page_first_result . ',' .  $single_page_results;
+                $result = mysqli_query($conn, $sql2)
                 or die("Error: " . mysqli_error($conn));
                 while ($row = mysqli_fetch_array($result)) :
                     ?>
@@ -69,11 +85,11 @@
                       <span class="aa-product-price">$<?php echo $row['price'] ; ?></span><span class="aa-product-price"><del>$65.50</del></span>
                       <p class="aa-product-descrip"><?php echo $row['long_desc'] ; ?></p>
                     </figcaption>
-                  </figure>                         
+                  </figure>
                   <div class="aa-product-hvr-content">
                     <!-- <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
                     <a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><span class="fa fa-exchange"></span></a> -->
-                    <a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>                            
+                    <a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
                   </div>
                   <!-- product badge -->
                   <span class="aa-badge aa-sale" href="#">SALE!</span>
@@ -86,19 +102,19 @@
 
 
 
-                
-        
-               
-              <!-- quick view modal -->                  
+
+
+
+              <!-- quick view modal -->
               <div class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                  <div class="modal-content">                      
+                  <div class="modal-content">
                     <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                       <div class="row">
                         <!-- Modal view slider -->
-                        <div class="col-md-6 col-sm-6 col-xs-12">                              
-                          <div class="aa-product-view-slider">                                
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="aa-product-view-slider">
                             <div class="simpleLens-gallery-container" id="demo-1">
                               <div class="simpleLens-container">
                                   <div class="simpleLens-big-image-container">
@@ -112,7 +128,7 @@
                                      data-lens-image="img/view-slider/large/polo-shirt-1.png"
                                      data-big-image="img/view-slider/medium/polo-shirt-1.png">
                                       <img src="img/view-slider/thumbnail/polo-shirt-1.png">
-                                  </a>                                    
+                                  </a>
                                   <a href="#" class="simpleLens-thumbnail-wrapper"
                                      data-lens-image="img/view-slider/large/polo-shirt-3.png"
                                      data-big-image="img/view-slider/medium/polo-shirt-3.png">
@@ -166,31 +182,43 @@
                           </div>
                         </div>
                       </div>
-                    </div>                        
+                    </div>
                   </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
               </div>
-              <!-- / quick view modal -->   
+              <!-- / quick view modal -->
             </div>
             <div class="aa-product-catg-pagination">
               <nav>
                 <ul class="pagination">
-                  <li>
-                    <a href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                    </a>
-                  </li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li>
-                    <a href="#" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                    </a>
-                  </li>
-                </ul>
+                <li>
+                 <?php if($page > 1 ) : ?>
+                   <a href="product.php?page=<?php echo $page-1; ?>" aria-label="Previous">
+                     <span aria-hidden="true">&laquo;</span>
+                   </a>
+                 <?php endif; ?>
+               </li>
+               <?php
+                for ($page=1;$page<=$number_of_pages;$page++) {
+                     echo '<li><a href="product.php?page=' . $page . '">' . $page . '</a><li> ';
+                }
+                ?>
+               <li>
+                 <?php if (!isset($_GET['page'])) { ?>
+                         <a href="product.php?page=<?php echo 2; ?>" aria-label="Next">
+                           <span aria-hidden="true">&raquo;</span>
+                         </a>
+                        <?php
+
+                 } elseif ($_GET['page'] < $number_of_pages) {
+                        ?>
+                         <a href="product.php?page=<?php echo $_GET['page']+1; ?>" aria-label="Next">
+                           <span aria-hidden="true">&raquo;</span>
+                         </a>
+                     <?php
+                 } ?>
+               </li>
+            </ul>
               </nav>
             </div>
           </div>
@@ -204,11 +232,13 @@
               <?php
                 require 'admin/config.php';
                 $sql2 = "SELECT * FROM category";
-                $result = mysqli_query($conn, $sql2) 
+                $result = mysqli_query($conn, $sql2)
                 or die("Error: " . mysqli_error($conn));
                 while ($row = mysqli_fetch_array($result)) :
                     ?>
-                <li><a href="#"><?php echo $row['name'];?></a></li>
+                <li><?php echo "<a href='product.php?category=$row[category_id]'>" ;
+                          echo $row['name'];
+                          echo '</a>' ;?></li>
                 <?php endwhile ; ?>
                 <!-- <li><a href="">Sports</a></li> -->
               </ul>
@@ -220,18 +250,20 @@
               <?php
                 require 'admin/config.php';
                 $sql2 = "SELECT * FROM tags";
-                $result = mysqli_query($conn, $sql2) 
+                $result = mysqli_query($conn, $sql2)
                 or die("Error: " . mysqli_error($conn));
                 while ($row = mysqli_fetch_array($result)) :
                     ?>
-                <a href="#"><?php echo $row['name'];?> </a>
+                    <?php echo "<a href='product.php?tag=$row[tag_id]'>" ;
+                          echo $row['name'];
+                          echo '</a>' ;?></li>
                 <?php endwhile ; ?>
                 <!-- <a href="#">Fashion</a> -->
               </div>
             </div>
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
-              <h3>Shop By Price</h3>              
+              <h3>Shop By Price</h3>
               <!-- price range -->
               <div class="aa-sidebar-price-range">
                <form action="">
@@ -241,7 +273,7 @@
                  <span id="skip-value-upper" class="example-val">100.00</span>
                  <button class="aa-filter-btn" type="submit">Filter</button>
                </form>
-              </div>              
+              </div>
 
             </div>
             <!-- single sidebar -->
@@ -260,7 +292,7 @@
                 <a class="aa-color-cyan" href="#"></a>
                 <a class="aa-color-olive" href="#"></a>
                 <a class="aa-color-orchid" href="#"></a>
-              </div>                            
+              </div>
             </div>
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
@@ -272,24 +304,24 @@
                     <div class="aa-cartbox-info">
                       <h4><a href="#">Product Name</a></h4>
                       <p>1 x $250</p>
-                    </div>                    
+                    </div>
                   </li>
                   <li>
                     <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-1.jpg"></a>
                     <div class="aa-cartbox-info">
                       <h4><a href="#">Product Name</a></h4>
                       <p>1 x $250</p>
-                    </div>                    
+                    </div>
                   </li>
                    <li>
                     <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-2.jpg"></a>
                     <div class="aa-cartbox-info">
                       <h4><a href="#">Product Name</a></h4>
                       <p>1 x $250</p>
-                    </div>                    
-                  </li>                                      
+                    </div>
+                  </li>
                 </ul>
-              </div>                            
+              </div>
             </div>
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
@@ -301,28 +333,28 @@
                     <div class="aa-cartbox-info">
                       <h4><a href="#">Product Name</a></h4>
                       <p>1 x $250</p>
-                    </div>                    
+                    </div>
                   </li>
                   <li>
                     <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-1.jpg"></a>
                     <div class="aa-cartbox-info">
                       <h4><a href="#">Product Name</a></h4>
                       <p>1 x $250</p>
-                    </div>                    
+                    </div>
                   </li>
                    <li>
                     <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-2.jpg"></a>
                     <div class="aa-cartbox-info">
                       <h4><a href="#">Product Name</a></h4>
                       <p>1 x $250</p>
-                    </div>                    
-                  </li>                                      
+                    </div>
+                  </li>
                 </ul>
-              </div>                            
+              </div>
             </div>
           </aside>
         </div>
-       
+
       </div>
     </div>
   </section>

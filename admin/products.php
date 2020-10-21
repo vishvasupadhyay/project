@@ -211,7 +211,7 @@ require 'sidebar.php';
     
     
         $sql = 'INSERT INTO products 
-        (`category_id`, `name`  , `price` , `image`,`short_description`,`long_description`)
+        (`category_id`, `name`  , `price` , `image`,`short_desc`,`long_desc`)
         VALUES("'.$category.'","'.$name.'","'.$price.'",
         "'.$img.'","'.$short_desc.'","'.$long_desc.'")';
     
