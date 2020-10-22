@@ -121,7 +121,7 @@ $this_page_first_result = ($page-1)*$single_page_results;
                             <!-- <span class="aa-badge aa-sold-out" href="#">Sold Out!</span>
                                 <span class="aa-badge aa-hot" href="#">HOT!</span> -->
                         </li>
-                        <?php endwhile ; ?>
+                        
                         <!-- quick view modal -->
                         <div class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -201,11 +201,15 @@ $this_page_first_result = ($page-1)*$single_page_results;
                                     </div>
                                 </div>
                                 <!-- /.modal-content -->
+                        
                             </div>
                             <!-- /.modal-dialog -->
+                           
                         </div>
                         <!-- / quick view modal -->
+                        <?php endwhile ; ?>
                     </div>
+                    
                     <div class="aa-product-catg-pagination">
                         <nav>
                             <ul class="pagination">
