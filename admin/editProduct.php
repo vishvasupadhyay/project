@@ -10,12 +10,12 @@
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link     http://www.hashbangcode.com/
  */
-require '../config.php';
+require 'config.php';
 require 'products.php';
 
-$pnm = $_GET['pname'];
-$pid = $_GET['pid'];
-$ppr = $_GET['pprice'];
+$pnm = $_GET['name'];
+$pid = $_GET['product_id'];
+$ppr = $_GET['price'];
 
 ?>
 <?php
@@ -24,12 +24,12 @@ $errors = array();
 $message = '';
 
 if (isset($_POST['submit'])) {
-    $pname = isset($_POST['pname'])?$_POST['pname']:'';
-    $pid = isset($_POST['p_id'])?$_POST['p_id']:'';
-    $pprice = isset($_POST['pprice'])?$_POST['pprice']:'';
+    $pname = isset($_POST['name'])?$_POST['name']:'';
+    $pid = isset($_POST['product_id'])?$_POST['product_id']:'';
+    $pprice = isset($_POST['price'])?$_POST['price']:'';
 
-    $query = "UPDATE product SET pname='$pname' , pprice='$pprice' 
-              WHERE pid = '$pid' " ;
+    $query = "UPDATE product SET name='$pname' , price='$pprice' 
+              WHERE product_id = '$pid' " ;
     
     $data = mysqli_query($conn, $query);
     if ($data) {

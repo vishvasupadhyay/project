@@ -16,5 +16,4 @@ if ($data) {
 } else {
     header('Location: index.php');
 } 
-
 ?>
